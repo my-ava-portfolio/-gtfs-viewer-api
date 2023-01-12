@@ -15,7 +15,7 @@ import (
 
 
 
-func readJson(path string) ([]structures.Stop) {
+func readJson(path string) ([]structures.Feature) {
 	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
 		panic("not found")
 	}
@@ -24,7 +24,6 @@ func readJson(path string) ([]structures.Stop) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println("Successfully Opened users.json")
 
 	// read jsonFile as a byte array.
 	byteValue, _ := ioutil.ReadAll(jsonFile)
@@ -35,22 +34,25 @@ func readJson(path string) ([]structures.Stop) {
 	// unmarshal the byteArray containing the jsonFile's content into 'features' defined above
 	json.Unmarshal(byteValue, &features)
 
-	return features
+	// set interface to each stop
+	y := make([]structures.Feature, len(features))
+	for i, v := range features {
+		y[i] = v
+	}
 
+	return y
 }
 
-func filterByDate(features []structures.Stop, date int32) []structures.Stop {
+func filterByDate(features []structures.Feature, date int32) []structures.Feature {
 	defer timeHelper.TimeTrack(time.Now(), "filterByDate")
 
-    var featuresFiltered []structures.Stop
-
+    var featuresFiltered []structures.Feature
     for _, stop := range features {
 
-        if stop.StartDate <= date && stop.EndDate >= date {
+        if stop.IsDateValid(date) {
             featuresFiltered = append(featuresFiltered, stop)
         }
     }
-
 	return featuresFiltered
 }
 
