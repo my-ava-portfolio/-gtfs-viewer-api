@@ -35,10 +35,6 @@ func readJson(path string) ([]structures.Stop) {
 	// unmarshal the byteArray containing the jsonFile's content into 'features' defined above
 	json.Unmarshal(byteValue, &features)
 
-	// we iterate through every feature
-	//for i := 0; i < len(features); i++ {
-		//log.Printf("x: " + strconv.FormatFloat(features[i].x, 'g', 3, 64) + "- y: " + strconv.FormatFloat(features[i].y, 'g', 3, 64))
-	//}
 	return features
 
 }
