@@ -29,9 +29,6 @@ func readJson(path string) ([]structures.Stop) {
 	// read jsonFile as a byte array.
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 
-    //var res map[string]interface{}
-    //json.Unmarshal([]byte(byteValue), &res)
-
 	// init features array
 	var features []structures.Stop
 
