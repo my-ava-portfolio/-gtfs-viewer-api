@@ -2,6 +2,7 @@ package main
 
 import (
 	timeHelper "gtfs_viewer/src/internals/time"
+	"gtfs_viewer/src/structures"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -12,18 +13,9 @@ import (
 	"time"
 )
 
-type Stop struct {
-	Index  			string    	`json:"index"`
-	Xcoord        	float64    	`json:"x"`
-	Ycoord		 	float64    	`json:"y"`
-	StartDate  		int32    	`json:"start_date"`
-	EndDate     	int32    	`json:"end_date"`
-	RouteType  		string		`json:"route_type"`
-	RouteLongName	string    	`json:"route_long_name"`
-}
 
 
-func readJson(path string) ([]Stop) {
+func readJson(path string) ([]structures.Stop) {
 	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
 		panic("not found")
 	}
@@ -41,7 +33,7 @@ func readJson(path string) ([]Stop) {
     //json.Unmarshal([]byte(byteValue), &res)
 
 	// init features array
-	var features []Stop
+	var features []structures.Stop
 
 	// unmarshal the byteArray containing the jsonFile's content into 'features' defined above
 	json.Unmarshal(byteValue, &features)
@@ -54,10 +46,10 @@ func readJson(path string) ([]Stop) {
 
 }
 
-func filterByDate(features []Stop, date int32) []Stop {
+func filterByDate(features []structures.Stop, date int32) []structures.Stop {
 	defer timeHelper.TimeTrack(time.Now(), "filterByDate")
 
-    var featuresFiltered []Stop
+    var featuresFiltered []structures.Stop
 
     for _, stop := range features {
 
