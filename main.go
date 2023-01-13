@@ -1,66 +1,65 @@
 package main
 
 import (
-	timeHelper "gtfs_viewer/src/internals/time"
-	"gtfs_viewer/src/structures"
-	"encoding/json"
-	"errors"
-	"fmt"
-	"io/ioutil"
-	"log"
-	"os"
+	"gtfs_viewer/src/config"
+	gtfsStops "gtfs_viewer/src/gtfstops"
+	"net/http"
 	"strconv"
-	"time"
+	"github.com/gin-gonic/gin"
 )
 
 
+func movingStopsRoute(context *gin.Context) {
+	area := context.Param("area")
+    dateParam := context.Query("date")
+    
+    if dateParam == "" {
+		context.String(http.StatusBadRequest, "Param 'date' is missing")
+		return
+    } else {
+		var dataFound []gtfsStops.Stop
+		for _, feature := range data.Files {
+			if feature.Title == area {
+				dataFound = feature.Data
+			}
+		}
+		if dataFound == nil {
+			context.String(http.StatusBadRequest, "area not found")
+			return
+		}
 
-func readJson(path string) ([]structures.Feature) {
-	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
-		panic("not found")
-	}
+		date, _ := strconv.Atoi(dateParam)
+		// TODO add error condition check
+		stopsFound := gtfsStops.FilterByDate(dataFound, uint32(date))
 
-	jsonFile, err := os.Open(path)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	// read jsonFile as a byte array.
-	byteValue, _ := ioutil.ReadAll(jsonFile)
-
-	// init features array
-	var features []structures.Stop
-
-	// unmarshal the byteArray containing the jsonFile's content into 'features' defined above
-	json.Unmarshal(byteValue, &features)
-
-	// set interface to each stop
-	y := make([]structures.Feature, len(features))
-	for i, v := range features {
-		y[i] = v
-	}
-
-	return y
+		context.JSON(http.StatusOK, stopsFound)
+ 	}	
 }
 
-func filterByDate(features []structures.Feature, date int32) []structures.Feature {
-	defer timeHelper.TimeTrack(time.Now(), "filterByDate")
 
-    var featuresFiltered []structures.Feature
-    for _, stop := range features {
+func gtfsGroupRouterRequests(router *gin.Engine) {
+	v2 := router.Group("/api/v2/gtfs_builder")
 
-        if stop.IsDateValid(date) {
-            featuresFiltered = append(featuresFiltered, stop)
-        }
-    }
-	return featuresFiltered
+	v2.GET(":area/moving_nodes", movingStopsRoute)
+	//v2.GET("/range_dates", movingStopsRoute)
+	//v2.GET("/route_types", movingStopsRoute)
+	//v2.GET("/existing_study_areas", movingStopsRoute)
+
 }
 
+var data config.ConfigModel
+// invoked before main()
+func init() {
+    // loads data
+    data = config.ParseConfig()
+
+}
 
 func main() {
+	// https://chenyitian.gitbooks.io/gin-web-framework/content/docs/24.html
+	router := gin.Default()
 
-	data := readJson("ter_data.json")
-	dataFound := filterByDate(data, 1637856404)
-	log.Println(strconv.Itoa(len(dataFound)))
+	gtfsGroupRouterRequests(router)
 
+	router.Run(":8080")
 }
