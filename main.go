@@ -10,7 +10,8 @@ import (
 
 
 func main() {
-	// https://chenyitian.gitbooks.io/gin-web-framework/content/docs/24.html
+	gin.SetMode(gin.ReleaseMode)    
+
 	router := gin.Default()
 
 	router.Use(cors.New(cors.Config{
@@ -18,7 +19,6 @@ func main() {
 		AllowMethods:     []string{"GET"},
 		AllowHeaders:     []string{"Origin"},
 		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
 	  }))
 	  
 	gtfs.GtfsGroupRouterRequests(router)

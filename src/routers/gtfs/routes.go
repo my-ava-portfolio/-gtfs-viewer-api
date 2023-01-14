@@ -43,10 +43,10 @@ func rangeDatesRoute(context *gin.Context) {
 }
 
 func GtfsGroupRouterRequests(router *gin.Engine) {
-	v2 := router.Group("/api/v2/gtfs_builder")
+	group := router.Group("/api/v2/gtfs_builder")
 
-	v2.GET(":area/moving_nodes", movingStopsRoute)
-	v2.GET(":area/range_dates", rangeDatesRoute)
+	group.GET(":area/moving_nodes", movingStopsRoute)
+	group.GET(":area/range_dates", rangeDatesRoute)
 	//v2.GET("/route_types", movingStopsRoute)
 
 }
