@@ -3,10 +3,9 @@ package main
 import (
 	"gtfs_viewer/src/config"
 	gtfsStops "gtfs_viewer/src/gtfstops"
-	"gtfs_viewer/src/internals/utils"
+	"gtfs_viewer/src/helpers"
 	"net/http"
 	"strconv"
-
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -60,7 +59,7 @@ func rangeDatesRoute(context *gin.Context) {
 		EndDate: dataFound.EndDate,
 	}
 	context.JSON(http.StatusOK, result)
-	utils.PrintMemresultUsage()
+	helpers.PrintMemresultUsage()
 }
 
 

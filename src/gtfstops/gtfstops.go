@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"gtfs_viewer/src/internals/utils"
+	"gtfs_viewer/src/helpers"
 	"io"
 	"os"
 	"runtime"
@@ -28,7 +28,7 @@ func (s *Stop) IsDateValid(date uint32) bool {
 
 
 func ReadJson(path string) []Stop {
-	defer utils.TimeTrack(time.Now(), "readJson")
+	defer helpers.TimeTrack(time.Now(), "readJson")
 
 	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
 		panic(path + " not found")
@@ -56,7 +56,7 @@ func ReadJson(path string) []Stop {
 
 
 func FilterByDate(features []Stop, date uint32) []Stop {
-	defer utils.TimeTrack(time.Now(), "filterByDate")
+	defer helpers.TimeTrack(time.Now(), "filterByDate")
 
     var featuresFiltered []Stop
     for _, stop := range features {
