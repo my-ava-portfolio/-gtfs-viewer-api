@@ -40,17 +40,20 @@ func getData(path string, suffixFilter string) []FileModel {
 
 func computeDataMetadata(fileMetadata *FileModel) {
 	var x, y []float32
-	var Dates []uint32
+	var dates []uint32
+	var routeTypes []uint8
 	for _, feature := range fileMetadata.Data {
 		x = append(x, feature.Xcoord)
 		y = append(y, feature.Ycoord)
-		Dates = append(Dates, feature.StartDate, feature.EndDate)
+		dates = append(dates, feature.StartDate, feature.EndDate)
+		routeTypes = append(routeTypes, feature.RouteType)
 	}
 
-	DatesBounds := internals.GetMinmax_uint32Array(Dates)
+	DatesBounds := internals.GetMinmax_uint32Array(dates)
 	fileMetadata.StartDate = DatesBounds.Min
 	fileMetadata.EndDate = DatesBounds.Max
 	fileMetadata.Bounds = helpers.GetBoundsFromXsAndYs(x, y)
+	fileMetadata.routeTypes = internals.GetUniquesUint8(routeTypes)
 }
 
 func readJson(path string) []Stop {

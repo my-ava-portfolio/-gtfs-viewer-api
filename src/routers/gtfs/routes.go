@@ -42,11 +42,18 @@ func rangeDatesRoute(context *gin.Context) {
 	helpers.PrintMemresultUsage()
 }
 
+func transportTypeRoute(context *gin.Context) {
+	area := context.Param("area")
+
+	dataFound := SelectData(area)
+	context.JSON(http.StatusOK, dataFound.routeTypes)
+}
+
 func GtfsGroupRouterRequests(router *gin.Engine) {
 	group := router.Group("/api/v2/gtfs_builder")
 
 	group.GET(":area/moving_nodes", movingStopsRoute)
 	group.GET(":area/range_dates", rangeDatesRoute)
-	//v2.GET("/route_types", movingStopsRoute)
+	group.GET(":area/route_types", transportTypeRoute)
 
 }

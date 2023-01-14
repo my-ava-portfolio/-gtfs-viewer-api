@@ -16,11 +16,12 @@ type rangeDataModel struct {
 }
 
 type FileModel struct {
-	Title     string
-	Data      []Stop
-	Bounds    [4]float32
-	StartDate uint32
-	EndDate   uint32
+	Title     	string
+	Data      	[]Stop
+	Bounds    	[4]float32
+	StartDate 	uint32
+	EndDate   	uint32
+	routeTypes	[]uint8
 }
 
 type ConfigModel struct {
