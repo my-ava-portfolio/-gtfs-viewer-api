@@ -1,4 +1,4 @@
-package internals
+package bounds
 
 
 type minMaxFloat32Model struct {

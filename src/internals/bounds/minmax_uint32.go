@@ -1,4 +1,4 @@
-package internals
+package bounds
 
 
 type minMaxUint32Model struct {

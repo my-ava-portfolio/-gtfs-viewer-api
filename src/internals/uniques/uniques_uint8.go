@@ -1,7 +1,7 @@
-package internals
+package uniques
 
 
-func GetUniquesUint8(values []uint8) []uint8 {
+func Uint8(values []uint8) []uint8 {
 	uniques := make([]uint8, 0, len(values))
 	m := make(map[uint8]bool)
 

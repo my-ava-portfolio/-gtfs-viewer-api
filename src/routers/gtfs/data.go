@@ -11,7 +11,9 @@ import (
 	"time"
 
 	"gtfs_viewer/src/helpers"
-	"gtfs_viewer/src/internals"
+	"gtfs_viewer/src/internals/uniques"
+	"gtfs_viewer/src/internals/bounds"
+
 )
 
 func getData(path string, suffixFilter string) []FileModel {
@@ -49,11 +51,11 @@ func computeDataMetadata(fileMetadata *FileModel) {
 		routeTypes = append(routeTypes, feature.RouteType)
 	}
 
-	DatesBounds := internals.GetMinmax_uint32Array(dates)
+	DatesBounds := bounds.GetMinmax_uint32Array(dates)
 	fileMetadata.StartDate = DatesBounds.Min
 	fileMetadata.EndDate = DatesBounds.Max
 	fileMetadata.Bounds = helpers.GetBoundsFromXsAndYs(x, y)
-	fileMetadata.routeTypes = internals.GetUniquesUint8(routeTypes)
+	fileMetadata.routeTypes = uniques.Uint8(routeTypes)
 }
 
 func readJson(path string) []Stop {
