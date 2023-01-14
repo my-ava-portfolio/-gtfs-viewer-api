@@ -57,3 +57,16 @@ func TestRouteTypesRoute(t *testing.T) {
     assert.Equal(t, http.StatusOK, w.Code)
     assert.NotEmpty(t, routeTypes)
 }
+
+func TestAvailableAreasRoute(t *testing.T) {
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/api/v2/gtfs_builder/existing_study_areas", nil)
+	Router.ServeHTTP(w, req)
+
+    var availableAreas []string
+    json.Unmarshal(w.Body.Bytes(), &availableAreas)
+
+    assert.Equal(t, http.StatusOK, w.Code)
+    assert.NotEmpty(t, availableAreas)
+}

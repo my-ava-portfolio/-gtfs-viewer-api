@@ -49,11 +49,21 @@ func transportTypeRoute(context *gin.Context) {
 	context.JSON(http.StatusOK, dataFound.routeTypes)
 }
 
+func availableAreasRoute(context *gin.Context) {
+	var availableAreas []string
+	for _, feature := range GtfsInputData.Files {
+		availableAreas = append(availableAreas, feature.Title)
+	}
+	context.JSON(http.StatusOK, availableAreas)
+}
+
 func GtfsGroupRouterRequests(router *gin.Engine) {
 	group := router.Group("/api/v2/gtfs_builder")
 
 	group.GET(":area/moving_nodes", movingStopsRoute)
 	group.GET(":area/range_dates", rangeDatesRoute)
 	group.GET(":area/route_types", transportTypeRoute)
+	group.GET("/existing_study_areas", availableAreasRoute)
 
+	
 }
