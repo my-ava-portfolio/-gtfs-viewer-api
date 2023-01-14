@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"runtime"
 	"strings"
@@ -18,7 +17,7 @@ import (
 func getData(path string, suffixFilter string) []FileModel {
 	var filesFound []FileModel
 
-	files, err := ioutil.ReadDir(path)
+	files, err := os.ReadDir(path)
 	if err != nil {
 		panic("Read directory issue")
 	}
@@ -27,27 +26,31 @@ func getData(path string, suffixFilter string) []FileModel {
 			fileSplit := strings.Split(file.Name(), suffixFilter)
 			dataFound := readJson(path + file.Name())
 
-			var x, y []float32
-			var Dates []uint32
-			for _, feature := range dataFound {
-				x = append(x, feature.Xcoord)
-				y = append(y, feature.Ycoord)
-				Dates = append(Dates, feature.StartDate, feature.EndDate)
-			}
-			DatesBounds := internals.GetMinmax_uint32Array(Dates)
-			bounds := helpers.GetBoundsFromXsAndYs(x, y)
-
 			fileItem := FileModel{
 				Title:     fileSplit[0],
-				Data:      dataFound,
-				Bounds:    bounds,
-				StartDate: DatesBounds.Min,
-				EndDate:   DatesBounds.Max}
+				Data:      dataFound}
+			computeDataMetadata(&fileItem)
+
 			filesFound = append(filesFound, fileItem)
 		}
 	}
 
 	return filesFound
+}
+
+func computeDataMetadata(fileMetadata *FileModel) {
+	var x, y []float32
+	var Dates []uint32
+	for _, feature := range fileMetadata.Data {
+		x = append(x, feature.Xcoord)
+		y = append(y, feature.Ycoord)
+		Dates = append(Dates, feature.StartDate, feature.EndDate)
+	}
+
+	DatesBounds := internals.GetMinmax_uint32Array(Dates)
+	fileMetadata.StartDate = DatesBounds.Min
+	fileMetadata.EndDate = DatesBounds.Max
+	fileMetadata.Bounds = helpers.GetBoundsFromXsAndYs(x, y)
 }
 
 func readJson(path string) []Stop {
@@ -58,7 +61,6 @@ func readJson(path string) []Stop {
 	}
 
 	jsonFile, err := os.Open(path)
-
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -75,6 +77,18 @@ func readJson(path string) []Stop {
 	json.Unmarshal(byteValue, &features)
 
 	return features
+}
+
+func SelectData(area string) FileModel {
+	var dataFound FileModel
+
+	for _, feature := range GtfsInputData.Files {
+		if feature.Title == area {
+			dataFound = feature
+			break
+		}
+	}
+	return dataFound
 }
 
 func (s *Stop) IsDateValid(date uint32) bool {
@@ -94,3 +108,9 @@ func FilterByDate(features []Stop, date uint32) []Stop {
 	return featuresFiltered
 }
 
+var GtfsInputData ConfigModel
+func init() {
+    // loads data
+    GtfsInputData = ParseConfig()
+
+}

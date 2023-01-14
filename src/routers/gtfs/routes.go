@@ -9,21 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-
-
-
-func selectData(area string) FileModel {
-	var dataFound FileModel
-
-	for _, feature := range GtfsInputData.Files {
-		if feature.Title == area {
-			dataFound = feature
-		}
-	}
-	return dataFound
-}
-
-func MovingStopsRoute(context *gin.Context) {
+func movingStopsRoute(context *gin.Context) {
 	area := context.Param("area")
     dateParam := context.Query("date")
     
@@ -32,7 +18,7 @@ func MovingStopsRoute(context *gin.Context) {
 		return
     } else {
 		
-		dataFound := selectData(area)
+		dataFound := SelectData(area)
 
 		date, _ := strconv.Atoi(dateParam)
 		// TODO add error condition check
@@ -42,10 +28,10 @@ func MovingStopsRoute(context *gin.Context) {
  	}	
 }
 
-func RangeDatesRoute(context *gin.Context) {
+func rangeDatesRoute(context *gin.Context) {
 	area := context.Param("area")
 
-	dataFound := selectData(area)
+	dataFound := SelectData(area)
 
 	result := rangeDataModel{
 		DataBounds: dataFound.Bounds,
@@ -56,9 +42,11 @@ func RangeDatesRoute(context *gin.Context) {
 	helpers.PrintMemresultUsage()
 }
 
-var GtfsInputData ConfigModel
-func init() {
-    // loads data
-    GtfsInputData = ParseConfig()
+func GtfsGroupRouterRequests(router *gin.Engine) {
+	v2 := router.Group("/api/v2/gtfs_builder")
+
+	v2.GET(":area/moving_nodes", movingStopsRoute)
+	v2.GET(":area/range_dates", rangeDatesRoute)
+	//v2.GET("/route_types", movingStopsRoute)
 
 }

@@ -2,21 +2,11 @@ package main
 
 import (
 
-	gtfsRoute "gtfs_viewer/src/routers/gtfs"
+	gtfs "gtfs_viewer/src/routers/gtfs"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
-
-func gtfsGroupRouterRequests(router *gin.Engine) {
-	v2 := router.Group("/api/v2/gtfs_builder")
-
-	v2.GET(":area/moving_nodes", gtfsRoute.MovingStopsRoute)
-	v2.GET(":area/range_dates", gtfsRoute.RangeDatesRoute)
-	//v2.GET("/route_types", movingStopsRoute)
-
-}
-
 
 
 func main() {
@@ -31,7 +21,7 @@ func main() {
 		AllowCredentials: true,
 	  }))
 	  
-	gtfsGroupRouterRequests(router)
+	gtfs.GtfsGroupRouterRequests(router)
 
 	router.Run(":7001")
 }

@@ -1,8 +1,5 @@
 package gtfs
 
-import (
-)
-
 type Stop struct {
 	RouteLongName	string    	`json:"route_long_name"`
 	Xcoord        	float32    	`json:"x"`
