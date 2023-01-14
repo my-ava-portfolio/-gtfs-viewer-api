@@ -1,8 +1,10 @@
 package helpers
 
 import (
-	"testing"
 	"reflect"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGeomBounds(t *testing.T) {
@@ -11,7 +13,6 @@ func TestGeomBounds(t *testing.T) {
 
 	bounds := GetBoundsFromXsAndYs(x, y)
 
-	if !reflect.DeepEqual(bounds, [4]float32{1.5, 17.5, 4.5, 377.78}) {
-		t.Fatalf(`Geom bounds expected not found`)
-	}
+	assert.True(t, reflect.DeepEqual(bounds, [4]float32{1.5, 17.5, 4.5, 377.78}), `Geom bounds expected not found`)
+
 }

@@ -2,6 +2,7 @@ package bounds
 
 import (
 	"testing"
+    "github.com/stretchr/testify/assert"
 )
 
 func TestBoundsFloat32(t *testing.T) {
@@ -9,7 +10,6 @@ func TestBoundsFloat32(t *testing.T) {
 
 	bounds := GetMinmax_float32Array(values)
 
-	if  bounds.Min != 1.5 && bounds.Max != 4.5 {
-		t.Fatalf(`Min and Max expected not found`)
-	}
+    assert.True(t, bounds.Min == 1.5 && bounds.Max == 4.5, `Min and Max expected not found`)
+
 }

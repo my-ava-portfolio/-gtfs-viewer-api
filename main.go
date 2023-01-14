@@ -9,9 +9,7 @@ import (
 )
 
 
-func main() {
-	gin.SetMode(gin.ReleaseMode)    
-
+func setupRouter() *gin.Engine {
 	router := gin.Default()
 
 	router.Use(cors.New(cors.Config{
@@ -20,6 +18,13 @@ func main() {
 		AllowHeaders:     []string{"Origin"},
 		ExposeHeaders:    []string{"Content-Length"},
 	  }))
+	return router
+}
+
+func main() {
+	gin.SetMode(gin.ReleaseMode)    
+
+	router := setupRouter()
 	  
 	gtfs.GtfsGroupRouterRequests(router)
 

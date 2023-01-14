@@ -33,7 +33,7 @@ func rangeDatesRoute(context *gin.Context) {
 
 	dataFound := SelectData(area)
 
-	result := rangeDataModel{
+	result := RangeDataModel{
 		DataBounds: dataFound.Bounds,
 		StartDate: dataFound.StartDate,
 		EndDate: dataFound.EndDate,

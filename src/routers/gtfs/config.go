@@ -9,7 +9,7 @@ type Stop struct {
 	RouteType  		uint8		`json:"route_type"`
 }
 
-type rangeDataModel struct {
+type RangeDataModel struct {
 	DataBounds		[4]float32
 	StartDate		uint32
 	EndDate			uint32

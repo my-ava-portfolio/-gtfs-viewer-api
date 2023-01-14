@@ -3,6 +3,8 @@ package uniques
 import (
 	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestUniquesUint8(t *testing.T) {
@@ -10,7 +12,6 @@ func TestUniquesUint8(t *testing.T) {
 
 	uniques := Uint8(values)
 
-	if !reflect.DeepEqual(uniques, []uint8{4, 1, 2, 3})  {
-		t.Fatalf(`Not equals`)
-	}
+	assert.True(t, reflect.DeepEqual(uniques, []uint8{4, 1, 2, 3}), `Min and Max expected not found`)
+
 }
