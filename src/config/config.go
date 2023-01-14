@@ -23,7 +23,7 @@ type ConfigModel struct {
 
 
 func ParseConfig() ConfigModel {
-	filesFound := getFiles("data/", "_data.json")
+	filesFound := getData("data/", "_data.json")
 
 	config := ConfigModel{
 		Files: 		filesFound,
@@ -31,7 +31,7 @@ func ParseConfig() ConfigModel {
 	return config
 }
 
-func getFiles(path string, suffixFilter string) []FileModel {
+func getData(path string, suffixFilter string) []FileModel {
 	var filesFound []FileModel
 
 	files, err := oSReadDir(path)
