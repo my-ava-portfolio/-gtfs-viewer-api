@@ -1,6 +1,7 @@
 package config
 
 import (
+	"gtfs_viewer/src/geom"
 	"gtfs_viewer/src/gtfstops"
 	"os"
 	"strings"
@@ -10,6 +11,9 @@ import (
 type FileModel struct {
 	Title		string
 	Data		[]gtfstops.Stop
+	Bounds 		[4]float32
+	StartDate	uint32
+	EndDate		uint32
 }
 
 type ConfigModel struct {
@@ -37,10 +41,24 @@ func getFiles(path string, suffixFilter string) []FileModel {
 	for _, file := range files {
 		if strings.Contains(file, suffixFilter) {
 			fileSplit := strings.Split(file, suffixFilter)
+			dataFound := gtfstops.ReadJson(path + file)
+
+			var x, y []float32
+			var Dates []uint32
+			for _, feature := range dataFound {
+				x = append(x, feature.Xcoord)
+				y = append(y, feature.Ycoord)
+				Dates = append(Dates, feature.StartDate, feature.EndDate)
+			}
+			startDate, endDate := geom.FindMaxAndMinInt(Dates)
+			bounds := geom.GetBounds(x, y)
+
 			fileItem := FileModel{
 				Title: fileSplit[0], 
-				Data: gtfstops.ReadJson(path + file),
-			}
+				Data: dataFound,
+				Bounds: bounds,
+				StartDate: startDate, 
+				EndDate: endDate}
 			filesFound = append(filesFound, fileItem)
 		}
     }

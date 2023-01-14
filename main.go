@@ -3,11 +3,23 @@ package main
 import (
 	"gtfs_viewer/src/config"
 	gtfsStops "gtfs_viewer/src/gtfstops"
+	"gtfs_viewer/src/internals/utils"
 	"net/http"
 	"strconv"
+
 	"github.com/gin-gonic/gin"
 )
 
+func selectData(area string) config.FileModel {
+	var dataFound config.FileModel
+
+	for _, feature := range data.Files {
+		if feature.Title == area {
+			dataFound = feature
+		}
+	}
+	return dataFound
+}
 
 func movingStopsRoute(context *gin.Context) {
 	area := context.Param("area")
@@ -17,33 +29,47 @@ func movingStopsRoute(context *gin.Context) {
 		context.String(http.StatusBadRequest, "Param 'date' is missing")
 		return
     } else {
-		var dataFound []gtfsStops.Stop
-		for _, feature := range data.Files {
-			if feature.Title == area {
-				dataFound = feature.Data
-			}
-		}
-		if dataFound == nil {
-			context.String(http.StatusBadRequest, "area not found")
-			return
-		}
+		
+		dataFound := selectData(area)
 
 		date, _ := strconv.Atoi(dateParam)
 		// TODO add error condition check
-		stopsFound := gtfsStops.FilterByDate(dataFound, uint32(date))
+		stopsFound := gtfsStops.FilterByDate(dataFound.Data, uint32(date))
 
 		context.JSON(http.StatusOK, stopsFound)
  	}	
 }
 
 
+type rangeDataModel struct {
+	DataBounds		[4]float32
+	StartDate		uint32
+	EndDate			uint32
+}
+
+
+func rangeDatesRoute(context *gin.Context) {
+	area := context.Param("area")
+
+	dataFound := selectData(area)
+
+	result := rangeDataModel{
+		DataBounds: dataFound.Bounds,
+		StartDate: dataFound.StartDate,
+		EndDate: dataFound.EndDate,
+	}
+	context.JSON(http.StatusOK, result)
+	utils.PrintMemresultUsage()
+}
+
+
+
 func gtfsGroupRouterRequests(router *gin.Engine) {
 	v2 := router.Group("/api/v2/gtfs_builder")
 
 	v2.GET(":area/moving_nodes", movingStopsRoute)
-	//v2.GET("/range_dates", movingStopsRoute)
+	v2.GET(":area/range_dates", rangeDatesRoute)
 	//v2.GET("/route_types", movingStopsRoute)
-	//v2.GET("/existing_study_areas", movingStopsRoute)
 
 }
 
