@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"os"
 	"runtime"
 	"strings"
@@ -75,14 +74,13 @@ func readJson(path string) []Stop {
 	defer runtime.GC()
 
 	// read jsonFile as a byte array.
-	byteValue, _ := io.ReadAll(jsonFile)
+	decoder := json.NewDecoder(jsonFile)
 
 	// init features array
 	var features []Stop
 
-	// unmarshal the byteArray containing the jsonFile's content into 'features' defined above
-	json.Unmarshal(byteValue, &features)
-
+    decoder.Decode(&features)
+		
 	return features
 }
 
