@@ -14,22 +14,6 @@ import (
 	gtfs "gtfs_viewer/src/routers/gtfs"
 )
 
-var Router *gin.Engine
-func TestMain(m *testing.M)() {
-	pathData := "testData/"
-
-	Router = setupRouter()
-	gtfs.GtfsGroupRouterHandler(pathData, Router)
-
-	// BEFORE tests
-    exitVal := m.Run()
-    // AFTER tests
-
-    os.Exit(exitVal)
-
-
-}
-
 func TestMovingNodesRoute(t *testing.T) {
 
 	w := httptest.NewRecorder()
@@ -80,4 +64,17 @@ func TestAvailableAreasRoute(t *testing.T) {
 
     assert.Equal(t, http.StatusOK, w.Code)
     assert.NotEmpty(t, availableAreas)
+}
+
+var Router *gin.Engine
+func TestMain(m *testing.M)() {
+
+	Router = setupRouter()
+	gtfs.GtfsGroupRouterHandler("testData/", Router)
+
+	// BEFORE tests
+    exitVal := m.Run()
+    // AFTER tests
+
+    os.Exit(exitVal)
 }

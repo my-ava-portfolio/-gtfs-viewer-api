@@ -26,8 +26,7 @@ func main() {
 
 	router := setupRouter()
 
-	pathData := "data/"
-	gtfs.GtfsGroupRouterHandler(pathData, router)
+	gtfs.GtfsGroupRouterHandler("data/", router)
 
 	router.Run(":7001")
 }
