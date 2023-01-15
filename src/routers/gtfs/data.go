@@ -102,13 +102,13 @@ func (s *Stop) IsDateValid(date uint32) bool {
 	return s.StartDate <= date && s.EndDate >= date
 }
 
-func FilterByDate(features []Stop, date uint32) []Stop {
+func FilterByDate(features []Stop, date uint32, bounds [4]float32) []Stop {
 	defer helpers.TimeTrack(time.Now(), "filterByDate")
 
     var featuresFiltered []Stop
     for _, stop := range features {
 
-        if stop.IsDateValid(date) {
+        if stop.IsDateValid(date) && helpers.IsPointIntersectsBounds([2]float32{stop.Xcoord, stop.Ycoord}, bounds) {
             featuresFiltered = append(featuresFiltered, stop)
         }
     }

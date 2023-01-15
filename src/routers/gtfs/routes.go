@@ -2,6 +2,7 @@ package gtfs
 
 import (
 	"gtfs_viewer/src/helpers"
+	"strings"
 
 	"net/http"
 	"strconv"
@@ -11,18 +12,27 @@ import (
 
 func movingStopsRoute(context *gin.Context) {
 	area := context.Param("area")
+
     dateParam := context.Query("date")
-    
+	bounds := context.Query("bounds")
+
     if dateParam == "" {
 		context.String(http.StatusBadRequest, "Param 'date' is missing")
 		return
     } else {
-		
+
+		boundsStrings := strings.Split(bounds, ",")
+		var boundsValues [4]float32
+		for index, element := range boundsStrings {
+			element, _ := strconv.ParseFloat(element, 64)
+			boundsValues[index] = float32(element)
+		}
+
 		dataFound := SelectData(area)
 
 		date, _ := strconv.Atoi(dateParam)
 		// TODO add error condition check
-		stopsFound := FilterByDate(dataFound.Data, uint32(date))
+		stopsFound := FilterByDate(dataFound.Data, uint32(date), boundsValues)
 
 		context.JSON(http.StatusOK, stopsFound)
  	}	
