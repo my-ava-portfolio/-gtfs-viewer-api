@@ -28,12 +28,5 @@ type ConfigModel struct {
 	Files []FileModel
 }
 
-func ParseConfig() ConfigModel {
-	filesFound := getData("data/", "_data.json")
 
-	config := ConfigModel{
-		Files: filesFound,
-	}
-	return config
-}
 

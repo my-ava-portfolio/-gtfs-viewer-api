@@ -1,7 +1,6 @@
 package main
 
 import (
-
 	gtfs "gtfs_viewer/src/routers/gtfs"
 
 	"github.com/gin-contrib/cors"
@@ -22,11 +21,13 @@ func setupRouter() *gin.Engine {
 }
 
 func main() {
+
 	gin.SetMode(gin.ReleaseMode)    
 
 	router := setupRouter()
-	  
-	gtfs.GtfsGroupRouterRequests(router)
+
+	pathData := "data/"
+	gtfs.GtfsGroupRouterRequests(pathData, router)
 
 	router.Run(":7001")
 }

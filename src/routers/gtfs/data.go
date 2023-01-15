@@ -16,12 +16,12 @@ import (
 
 )
 
-func getData(path string, suffixFilter string) []FileModel {
+func GetData(path string, suffixFilter string) ConfigModel {
 	var filesFound []FileModel
 
 	files, err := os.ReadDir(path)
 	if err != nil {
-		panic("Read directory issue")
+		panic(path + " directory not found")
 	}
 	for _, file := range files {
 		if strings.Contains(file.Name(), suffixFilter) {
@@ -36,8 +36,10 @@ func getData(path string, suffixFilter string) []FileModel {
 			filesFound = append(filesFound, fileItem)
 		}
 	}
-
-	return filesFound
+	config := ConfigModel{
+		Files: filesFound,
+	}
+	return config
 }
 
 func computeDataMetadata(fileMetadata *FileModel) {
@@ -59,7 +61,7 @@ func computeDataMetadata(fileMetadata *FileModel) {
 }
 
 func readJson(path string) []Stop {
-	defer helpers.TimeTrack(time.Now(), "readJson")
+	defer helpers.TimeTrack(time.Now(), "ReadJson from " + path)
 
 	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
 		panic(path + " not found")
@@ -87,7 +89,7 @@ func readJson(path string) []Stop {
 func SelectData(area string) FileModel {
 	var dataFound FileModel
 
-	for _, feature := range GtfsInputData.Files {
+	for _, feature := range gtfsInputData.Files {
 		if feature.Title == area {
 			dataFound = feature
 			break
@@ -113,9 +115,12 @@ func FilterByDate(features []Stop, date uint32) []Stop {
 	return featuresFiltered
 }
 
-var GtfsInputData ConfigModel
+
+var gtfsInputData ConfigModel
 func init() {
     // loads data
-    GtfsInputData = ParseConfig()
+	//gtfsInputData = ParseConfig(&ModeSelected)
+
+    //GtfsInputData = ParseConfig()
 
 }

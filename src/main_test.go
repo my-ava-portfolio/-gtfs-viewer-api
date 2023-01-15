@@ -1,10 +1,12 @@
 package main
 
 import (
+	"testing"
+
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
-	"testing"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
@@ -13,16 +15,25 @@ import (
 )
 
 var Router *gin.Engine
-func init() {
+func TestMain(m *testing.M)() {
+	pathData := "testData/"
+
 	Router = setupRouter()
-	gtfs.GtfsGroupRouterRequests(Router)
+	gtfs.GtfsGroupRouterRequests(pathData, Router)
+
+	// BEFORE tests
+    exitVal := m.Run()
+    // AFTER tests
+
+    os.Exit(exitVal)
+
 
 }
 
 func TestMovingNodesRoute(t *testing.T) {
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/api/v2/gtfs_builder/ter/moving_nodes?date=1637857000", nil)
+	req, _ := http.NewRequest("GET", "/api/v2/gtfs_builder/fake/moving_nodes?date=1167642440", nil)
 	Router.ServeHTTP(w, req)
 
     var stops []gtfs.Stop
@@ -35,7 +46,7 @@ func TestMovingNodesRoute(t *testing.T) {
 func TestRangeDatesRoute(t *testing.T) {
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/api/v2/gtfs_builder/ter/range_dates", nil)
+	req, _ := http.NewRequest("GET", "/api/v2/gtfs_builder/fake/range_dates", nil)
 	Router.ServeHTTP(w, req)
 
     var rangeData gtfs.RangeDataModel
@@ -48,7 +59,7 @@ func TestRangeDatesRoute(t *testing.T) {
 func TestRouteTypesRoute(t *testing.T) {
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/api/v2/gtfs_builder/ter/route_types", nil)
+	req, _ := http.NewRequest("GET", "/api/v2/gtfs_builder/fake/route_types", nil)
 	Router.ServeHTTP(w, req)
 
     var routeTypes []uint8
