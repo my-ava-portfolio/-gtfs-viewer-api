@@ -19,7 +19,7 @@ func TestMain(m *testing.M)() {
 	pathData := "testData/"
 
 	Router = setupRouter()
-	gtfs.GtfsGroupRouterRequests(pathData, Router)
+	gtfs.GtfsGroupRouterHandler(pathData, Router)
 
 	// BEFORE tests
     exitVal := m.Run()

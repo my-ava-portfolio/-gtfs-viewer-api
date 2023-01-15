@@ -57,7 +57,7 @@ func availableAreasRoute(context *gin.Context) {
 	context.JSON(http.StatusOK, availableAreas)
 }
 
-func GtfsGroupRouterRequests(dataPath string, router *gin.Engine) {
+func GtfsGroupRouterHandler(dataPath string, router *gin.Engine) {
 	
 	// get data
 	gtfsSuffix := "_gtfsData.json"
@@ -69,6 +69,4 @@ func GtfsGroupRouterRequests(dataPath string, router *gin.Engine) {
 	group.GET(":area/range_dates", rangeDatesRoute)
 	group.GET(":area/route_types", transportTypeRoute)
 	group.GET("/existing_study_areas", availableAreasRoute)
-
-	
 }
