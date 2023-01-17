@@ -2,6 +2,7 @@ package gtfs
 
 import (
 	"gtfs_viewer/src/helpers"
+	"runtime"
 	"strings"
 
 	"net/http"
@@ -35,6 +36,9 @@ func movingStopsRoute(context *gin.Context) {
 		stopsFound := FilterByDate(dataFound.Data, uint32(date), boundsValues)
 
 		context.JSON(http.StatusOK, stopsFound)
+		
+		runtime.GC()
+
  	}	
 }
 
@@ -49,7 +53,6 @@ func rangeDatesRoute(context *gin.Context) {
 		EndDate: dataFound.EndDate,
 	}
 	context.JSON(http.StatusOK, result)
-	helpers.PrintMemresultUsage()
 }
 
 func transportTypeRoute(context *gin.Context) {
@@ -72,6 +75,7 @@ func GtfsGroupRouterHandler(dataPath string, router *gin.Engine) {
 	// get data
 	gtfsSuffix := "_gtfsData.json"
 	gtfsInputData = GetData(dataPath, gtfsSuffix)
+	helpers.PrintMemresultUsage()
 
 	group := router.Group("/api/v2/gtfs_builder")
 
