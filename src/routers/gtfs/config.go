@@ -1,7 +1,7 @@
 package gtfs
 
 type Stop struct {
-	RouteLongName	string    	`json:"route_long_name"`
+	//RouteLongName	string    	`json:"route_long_name"`
 	Xcoord        	float32    	`json:"x"`
 	Ycoord		 	float32    	`json:"y"`
 	StartDate  		uint32    	`json:"start_date"`
@@ -10,18 +10,16 @@ type Stop struct {
 }
 
 type RangeDataModel struct {
-	DataBounds		[4]float32
-	StartDate		uint32
-	EndDate			uint32
+	StartDate, EndDate		uint32
+	DataBounds				[4]float32
 }
 
 type FileModel struct {
-	Title     	string
-	Data      	[]Stop
-	Bounds    	[4]float32
-	StartDate 	uint32
-	EndDate   	uint32
-	routeTypes	[]uint8
+	Title     			string
+	Bounds    			[4]float32
+	StartDate, EndDate 	uint32
+	Data      			[]Stop
+	routeTypes			[]uint8
 }
 
 type ConfigModel struct {

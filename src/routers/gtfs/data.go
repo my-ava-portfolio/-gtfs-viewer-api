@@ -75,12 +75,15 @@ func readJson(path string) []Stop {
 
 	// read jsonFile as a byte array.
 	decoder := json.NewDecoder(jsonFile)
-
+	
 	// init features array
-	var features []Stop
+	var rawfeatures []Stop
 
-    decoder.Decode(&features)
-		
+    decoder.Decode(&rawfeatures)
+	features := make([]Stop, len(rawfeatures))
+
+	copy(features, rawfeatures)
+
 	return features
 }
 
