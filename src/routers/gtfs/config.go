@@ -4,6 +4,7 @@ type Stop struct {
 	//RouteLongName	string    	`json:"route_long_name"`
 	Xcoord        	float32    	`json:"x"`
 	Ycoord		 	float32    	`json:"y"`
+	Index			uint32		`json:"index"`
 	StartDate  		uint32    	`json:"start_date"`
 	EndDate     	uint32    	`json:"end_date"`
 	RouteType  		uint8		`json:"route_type"`

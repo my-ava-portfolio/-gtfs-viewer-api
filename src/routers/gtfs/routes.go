@@ -69,8 +69,10 @@ func availableAreasRoute(context *gin.Context) {
 func GtfsGroupRouterHandler(dataPath string, router *gin.Engine) {
 	
 	// get data
-	gtfsSuffix := "_gtfsData.json"
-	gtfsInputData = GetData(dataPath, gtfsSuffix)
+	gtfsStopSuffix := "_gtfsData.json"
+	//gtfsRouteSuffix := "_routeGtfsData.json"
+
+	gtfsInputData = GetData(dataPath, gtfsStopSuffix)
 	helpers.PrintMemresultUsage()
 
 	group := router.Group("/api/v2/gtfs_builder")

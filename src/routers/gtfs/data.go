@@ -29,7 +29,8 @@ func GetData(path string, suffixFilter string) ConfigModel {
 
 			fileItem := FileModel{
 				Title:     fileSplit[0],
-				Data:      dataFound}
+				Data:      dataFound,
+			}
 			computeDataMetadata(&fileItem)
 
 			filesFound = append(filesFound, fileItem)
@@ -60,7 +61,7 @@ func computeDataMetadata(fileMetadata *FileModel) {
 }
 
 func readJson(path string) []Stop {
-	defer helpers.TimeTrack(time.Now(), "ReadJson from " + path)
+	defer helpers.TimeTrack(time.Now(), "ReadStopJson from " + path)
 
 	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
 		panic(path + " not found")
