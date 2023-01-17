@@ -2,7 +2,6 @@ package gtfs
 
 import (
 	"gtfs_viewer/src/helpers"
-	"runtime"
 	"strings"
 
 	"net/http"
@@ -36,9 +35,6 @@ func movingStopsRoute(context *gin.Context) {
 		stopsFound := FilterByDate(dataFound.Data, uint32(date), boundsValues)
 
 		context.JSON(http.StatusOK, stopsFound)
-		
-		runtime.GC()
-
  	}	
 }
 
