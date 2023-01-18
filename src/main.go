@@ -1,8 +1,7 @@
 package main
 
 import (
-	gtfs "gtfs_viewer/src/routers/gtfs"
-
+	"gtfs_viewer/src/routers/gtfs"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -19,6 +18,7 @@ func setupRouter() *gin.Engine {
 	  }))
 	return router
 }
+
 
 func main() {
 

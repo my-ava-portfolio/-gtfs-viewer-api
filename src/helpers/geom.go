@@ -11,7 +11,7 @@ func GetBoundsFromXsAndYs(x, y []float32) [4]float32 {
 }
 
 
-func IsPointIntersectsBounds(point [2]float32, bounds[4]float32) bool {
+func IsPointIntersectsBounds(point [2]float32, bounds[]float32) bool {
 	
 	if (point[0] >= bounds[0] && point[0] <= bounds[2]) && (point[1] >= bounds[1] && point[1] <= bounds[3]) {
 		return true

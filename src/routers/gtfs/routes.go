@@ -1,8 +1,9 @@
 package gtfs
 
 import (
+	gtfsStops "gtfs_viewer/src/core/stops"
 	"gtfs_viewer/src/helpers"
-	"strings"
+	"gtfs_viewer/src/internals/split"
 
 	"net/http"
 	"strconv"
@@ -10,70 +11,55 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var GlobalGtfsStopData gtfsStops.StopsContainer
+
+
 func movingStopsRoute(context *gin.Context) {
 	area := context.Param("area")
 
-    dateParam := context.Query("date")
+	dateParam := context.Query("date")
 	bounds := context.Query("bounds")
 
-    if dateParam == "" {
+	if dateParam == "" {
 		context.String(http.StatusBadRequest, "Param 'date' is missing")
 		return
-    } else {
+	} else {
 
-		boundsStrings := strings.Split(bounds, ",")
-		var boundsValues [4]float32
-		for index, element := range boundsStrings {
-			element, _ := strconv.ParseFloat(element, 64)
-			boundsValues[index] = float32(element)
+		date, err := strconv.ParseUint(dateParam, 10, 32)
+		if err != nil {
+			context.String(http.StatusBadRequest, "Param 'date' not relevant")
+			return
 		}
+		boundsValues := split.StringToFloat32(bounds, ",")
 
-		dataFound := SelectData(area)
-
-		date, _ := strconv.Atoi(dateParam)
-		// TODO add error condition check
-		stopsFound := FilterByDate(dataFound.Data, uint32(date), boundsValues)
-
+		stopsFound := GlobalGtfsStopData.GetStopsFilteredData(area, uint32(date), boundsValues)
 		context.JSON(http.StatusOK, stopsFound)
- 	}	
+	}
 }
 
 func rangeDatesRoute(context *gin.Context) {
 	area := context.Param("area")
-
-	dataFound := SelectData(area)
-
-	result := RangeDataModel{
-		DataBounds: dataFound.Bounds,
-		StartDate: dataFound.StartDate,
-		EndDate: dataFound.EndDate,
-	}
-	context.JSON(http.StatusOK, result)
+	context.JSON(http.StatusOK, 
+				 GlobalGtfsStopData.GetRangesData(area))
 }
 
 func transportTypeRoute(context *gin.Context) {
 	area := context.Param("area")
-
-	dataFound := SelectData(area)
-	context.JSON(http.StatusOK, dataFound.routeTypes)
+	context.JSON(http.StatusOK, 
+				 GlobalGtfsStopData.GetAreaRouteTypes(area))
 }
 
 func availableAreasRoute(context *gin.Context) {
-	var availableAreas []string
-	for _, feature := range gtfsInputData.Files {
-		availableAreas = append(availableAreas, feature.Title)
-	}
-	context.JSON(http.StatusOK, availableAreas)
+	//availableAreas := GetAreas()
+	context.JSON(http.StatusOK, 
+				 GlobalGtfsStopData.GetAreas())
 }
 
 func GtfsGroupRouterHandler(dataPath string, router *gin.Engine) {
-	
-	// get data
-	gtfsStopSuffix := "_gtfsData.json"
-	//gtfsRouteSuffix := "_routeGtfsData.json"
 
-	gtfsInputData = GetData(dataPath, gtfsStopSuffix)
-	helpers.PrintMemresultUsage()
+	// get data and set the data global var about GtfsStopsData
+	gtfsStopSuffix := "_gtfsData.json"
+	GlobalGtfsStopData = gtfsStops.GetData(dataPath, gtfsStopSuffix)
 
 	group := router.Group("/api/v2/gtfs_builder")
 
@@ -81,4 +67,6 @@ func GtfsGroupRouterHandler(dataPath string, router *gin.Engine) {
 	group.GET(":area/range_dates", rangeDatesRoute)
 	group.GET(":area/route_types", transportTypeRoute)
 	group.GET("/existing_study_areas", availableAreasRoute)
+	helpers.PrintMemresultUsage()
+
 }

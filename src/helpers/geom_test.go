@@ -19,7 +19,7 @@ func TestGeomBounds(t *testing.T) {
 
 func TestPointIntersectsBounds(t *testing.T) {
 	points := [2]float32{2.5, 25.6}
-	bounds := [4]float32{1.5, 17.5, 4.5, 377.78}
+	bounds := []float32{1.5, 17.5, 4.5, 377.78}
 
 	intersects := IsPointIntersectsBounds(points, bounds)
 
@@ -28,7 +28,7 @@ func TestPointIntersectsBounds(t *testing.T) {
 
 func TestPointNotIntersectsBounds(t *testing.T) {
 	points := [2]float32{0, 25.6}
-	bounds := [4]float32{1.5, 17.5, 4.5, 377.78}
+	bounds := []float32{1.5, 17.5, 4.5, 377.78}
 
 	intersects := IsPointIntersectsBounds(points, bounds)
 

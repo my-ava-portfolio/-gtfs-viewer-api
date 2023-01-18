@@ -11,7 +11,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 
-	gtfs "gtfs_viewer/src/routers/gtfs"
+	gtfs "gtfs_viewer/src/core/stops"
+	gtfsRoutes "gtfs_viewer/src/routers/gtfs"
+
 )
 
 func TestMovingNodesRoute(t *testing.T) {
@@ -20,7 +22,7 @@ func TestMovingNodesRoute(t *testing.T) {
 	req, _ := http.NewRequest("GET", "/api/v2/gtfs_builder/fake/moving_nodes?date=1167642440&bounds=-180.0,-89.0,180.0,89.0", nil)
 	Router.ServeHTTP(w, req)
 
-    var stops []gtfs.Stop
+    var stops []gtfs.StopItem
     json.Unmarshal(w.Body.Bytes(), &stops)
 
     assert.Equal(t, http.StatusOK, w.Code)
@@ -70,7 +72,7 @@ var Router *gin.Engine
 func TestMain(m *testing.M)() {
 
 	Router = setupRouter()
-	gtfs.GtfsGroupRouterHandler("testData/", Router)
+	gtfsRoutes.GtfsGroupRouterHandler("testData/", Router)
 
 	// BEFORE tests
     exitVal := m.Run()
