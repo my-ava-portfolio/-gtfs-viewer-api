@@ -8,6 +8,7 @@ type Stop struct {
 	StartDate  		uint32    	`json:"start_date"`
 	EndDate     	uint32    	`json:"end_date"`
 	RouteType  		uint8		`json:"route_type"`
+	RouteId			uint8		`json:"route_id"`
 }
 
 type RangeDataModel struct {
