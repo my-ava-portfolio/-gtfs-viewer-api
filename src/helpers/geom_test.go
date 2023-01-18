@@ -16,3 +16,21 @@ func TestGeomBounds(t *testing.T) {
 	assert.True(t, reflect.DeepEqual(bounds, [4]float32{1.5, 17.5, 4.5, 377.78}), `Geom bounds expected not found`)
 
 }
+
+func TestPointIntersectsBounds(t *testing.T) {
+	points := [2]float32{2.5, 25.6}
+	bounds := []float32{1.5, 17.5, 4.5, 377.78}
+
+	intersects := IsPointIntersectsBounds(points, bounds)
+
+	assert.True(t, intersects, `Point must intersect`)
+}
+
+func TestPointNotIntersectsBounds(t *testing.T) {
+	points := [2]float32{0, 25.6}
+	bounds := []float32{1.5, 17.5, 4.5, 377.78}
+
+	intersects := IsPointIntersectsBounds(points, bounds)
+
+	assert.False(t, intersects, `Point must not intersect`)
+}
