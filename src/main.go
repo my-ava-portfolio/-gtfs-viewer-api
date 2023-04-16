@@ -28,5 +28,5 @@ func main() {
 
 	gtfs.GtfsGroupRouterHandler("data/", router)
 
-	router.Run(":7001")
+	router.Run(":5000")
 }
