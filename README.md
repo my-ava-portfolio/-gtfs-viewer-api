@@ -1,6 +1,6 @@
 # gtfs-viewer-api
 
-Use the output of [gtfs-viewer-processing repoqitory](https://github.com/my-ava-portfolio/gtfs-viewer-processing)
+Use the output of [gtfs-viewer-processing repoqitory](https://github.com/amauryval/gtfs-viewer-processing)
 
 # Install go
 
