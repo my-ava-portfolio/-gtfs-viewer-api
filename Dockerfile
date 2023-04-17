@@ -26,8 +26,6 @@ COPY --from=build-env /$APP_NAME .
 
 # if running localy
 # COPY src/data data
-# Expose application port
-EXPOSE 5000
 
 RUN addgroup -S appgroup && adduser -S ava -G appgroup
 USER ava
