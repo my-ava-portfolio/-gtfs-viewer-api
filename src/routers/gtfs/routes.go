@@ -61,7 +61,7 @@ func GtfsGroupRouterHandler(dataPath string, router *gin.Engine) {
 	gtfsStopSuffix := "_gtfsData.json"
 	GlobalGtfsStopData = gtfsStops.GetData(dataPath, gtfsStopSuffix)
 
-	group := router.Group("/api/v2/gtfs_builder")
+	group := router.Group("/api/v2")
 
 	group.GET(":area/moving_nodes", movingStopsRoute)
 	group.GET(":area/range_dates", rangeDatesRoute)

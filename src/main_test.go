@@ -19,7 +19,7 @@ import (
 func TestMovingNodesRoute(t *testing.T) {
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/api/v2/gtfs_builder/fake/moving_nodes?date=1167642440&bounds=-180.0,-89.0,180.0,89.0", nil)
+	req, _ := http.NewRequest("GET", "/api/v2/fake/moving_nodes?date=1167642440&bounds=-180.0,-89.0,180.0,89.0", nil)
 	Router.ServeHTTP(w, req)
 
     var stops []gtfs.StopItem
@@ -32,7 +32,7 @@ func TestMovingNodesRoute(t *testing.T) {
 func TestRangeDatesRoute(t *testing.T) {
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/api/v2/gtfs_builder/fake/range_dates", nil)
+	req, _ := http.NewRequest("GET", "/api/v2/fake/range_dates", nil)
 	Router.ServeHTTP(w, req)
 
     var rangeData gtfs.RangeDataModel
@@ -45,7 +45,7 @@ func TestRangeDatesRoute(t *testing.T) {
 func TestRouteTypesRoute(t *testing.T) {
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/api/v2/gtfs_builder/fake/route_types", nil)
+	req, _ := http.NewRequest("GET", "/api/v2/fake/route_types", nil)
 	Router.ServeHTTP(w, req)
 
     var routeTypes []uint8
@@ -58,7 +58,7 @@ func TestRouteTypesRoute(t *testing.T) {
 func TestAvailableAreasRoute(t *testing.T) {
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/api/v2/gtfs_builder/existing_study_areas", nil)
+	req, _ := http.NewRequest("GET", "/api/v2/existing_study_areas", nil)
 	Router.ServeHTTP(w, req)
 
     var availableAreas []string
