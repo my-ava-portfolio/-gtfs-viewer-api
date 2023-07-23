@@ -1,5 +1,7 @@
 package bounds
 
+import "log"
+
 
 type minMaxUint32Model struct {
     Min uint32
@@ -44,12 +46,16 @@ func calculateMinMaxWithChannelUint32(input []uint32, mins chan uint32, maxs cha
     }
 
     for i := 0; i < len(input); i++ {
-        if input[i] < min {
-            min = input[i]
+        if input[i] != 0 {
+            if input[i] < min {
+                min = input[i]
+                log.Print(min)
+            }
+            if input[i] > max {
+                max = input[i]
+            }
         }
-        if input[i] > max {
-            max = input[i]
-        }
+
     }
 
     mins <- min // add mins to mins channel

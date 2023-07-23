@@ -55,6 +55,19 @@ func TestRouteTypesRoute(t *testing.T) {
     assert.NotEmpty(t, routeTypes)
 }
 
+func TestRouteLongNameRoute(t *testing.T) {
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/api/v2/gtfs_builder/fake/route_long_name?id=1", nil)
+	Router.ServeHTTP(w, req)
+
+    var routeTypes []uint8
+    json.Unmarshal(w.Body.Bytes(), &routeTypes)
+
+    assert.Equal(t, http.StatusOK, w.Code)
+    assert.NotEmpty(t, routeTypes)
+}
+
 func TestAvailableAreasRoute(t *testing.T) {
 
 	w := httptest.NewRecorder()
