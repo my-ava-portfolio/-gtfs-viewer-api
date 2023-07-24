@@ -13,7 +13,7 @@ func setupRouter() *gin.Engine {
 	router := gin.Default()
 
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:4200", "https://portfolio.amaury-valorge.com"},
+		AllowOrigins:     []string{"http://localhost:4200", "https://portfolio.amaury-valorge.com", "https://preprod.amaury-valorge.com"},
 		AllowMethods:     []string{"GET"},
 		AllowHeaders:     []string{"Origin"},
 		ExposeHeaders:    []string{"Content-Length"},
@@ -39,5 +39,5 @@ func main() {
 	gtfs.GtfsGroupRouterHandler("data/", router)
 	router.Use(ginredoc.New(doc))
 
-	router.Run(":7001")
+	router.Run(":5000")
 }
