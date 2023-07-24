@@ -13,7 +13,6 @@ import (
 
 	gtfs "gtfs_viewer/src/core/stops"
 	gtfsRoutes "gtfs_viewer/src/routers/gtfs"
-
 )
 
 func TestMovingNodesRoute(t *testing.T) {
@@ -55,17 +54,30 @@ func TestRouteTypesRoute(t *testing.T) {
     assert.NotEmpty(t, routeTypes)
 }
 
-func TestRouteLongNameRoute(t *testing.T) {
+func TestRouteLongNameRouteValid(t *testing.T) {
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/api/v2/gtfs_builder/fake/route_long_name?id=1", nil)
+	req, _ := http.NewRequest("GET", "/api/v2/gtfs_builder/fake/route_long_name?id=0", nil)
 	Router.ServeHTTP(w, req)
 
-    var routeTypes []uint8
-    json.Unmarshal(w.Body.Bytes(), &routeTypes)
+    var RouteLongName string
+    json.Unmarshal(w.Body.Bytes(), &RouteLongName)
 
     assert.Equal(t, http.StatusOK, w.Code)
-    assert.NotEmpty(t, routeTypes)
+    assert.Equal(t, "Stagecoach - Airport Shuttle", RouteLongName)
+}
+
+func TestRouteLongNameRouteNotValid(t *testing.T) {
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/api/v2/gtfs_builder/fake/route_long_name?id=100", nil)
+	Router.ServeHTTP(w, req)
+
+    var RouteLongName string
+    json.Unmarshal(w.Body.Bytes(), &RouteLongName)
+
+    assert.Equal(t, http.StatusOK, w.Code)
+    assert.Equal(t, "missing", RouteLongName)
 }
 
 func TestAvailableAreasRoute(t *testing.T) {

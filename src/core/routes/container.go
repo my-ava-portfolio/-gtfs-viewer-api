@@ -1,8 +1,7 @@
 package routes
 
 import (
-	"fmt"
-	"strconv"
+	"gtfs_viewer/src/internals/split"
 )
 
 type RoutesContainer struct {
@@ -14,15 +13,15 @@ func (cm RoutesContainer) GetRouteNameByRouteId(area string, id string) string {
 	longName := "missing"
 
 	for _, route := range dataFound.Data {
-		fmt.Print(route)
 
-		if route.RouteId == strconv.ParseUint(id) {
+		if route.RouteId == split.StringToUint64(id) {
 			longName = route.RouteLongName
 			break
 		}
 	}
 	return longName
 }
+
 
 func (cm RoutesContainer) selectData(area string) RoutesFeature {
 	var dataFound RoutesFeature
