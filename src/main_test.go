@@ -57,7 +57,7 @@ func TestRouteTypesRoute(t *testing.T) {
 func TestRouteLongNameRouteValid(t *testing.T) {
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/api/v2/gtfs_builder/fake/route_long_name?id=0", nil)
+	req, _ := http.NewRequest("GET", "/api/v2/fake/route_long_name?id=0", nil)
 	Router.ServeHTTP(w, req)
 
     var RouteLongName string
@@ -70,7 +70,7 @@ func TestRouteLongNameRouteValid(t *testing.T) {
 func TestRouteLongNameRouteNotValid(t *testing.T) {
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/api/v2/gtfs_builder/fake/route_long_name?id=100", nil)
+	req, _ := http.NewRequest("GET", "/api/v2/fake/route_long_name?id=100", nil)
 	Router.ServeHTTP(w, req)
 
     var RouteLongName string
