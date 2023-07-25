@@ -32,14 +32,20 @@ func (cm StopsContainer) GetRangesData(area string) RangeDataModel {
 	}
 }
 
-func (cm StopsContainer) GetStopsFilteredData(area string, date uint32, bounds []float32) []StopItem {
+func (cm StopsContainer) GetStopsFilteredData(area string, date uint32, bounds []float32) []StopItemFiltered {
 	dataFound := cm.selectData(area)
 
-	var featuresFiltered []StopItem
+	var featuresFiltered []StopItemFiltered
 	for _, stop := range dataFound.Data {
 
 		if stop.IsDateValid(date) && stop.IntersectsBounds(bounds) {
-			featuresFiltered = append(featuresFiltered, stop)
+			outputStop := StopItemFiltered{
+				X: stop.Xcoord,
+				Y: stop.Ycoord,
+				RouteType: stop.RouteType,
+				RouteId: stop.RouteId,
+			}
+			featuresFiltered = append(featuresFiltered, outputStop)
 		}
 	}
 	return featuresFiltered

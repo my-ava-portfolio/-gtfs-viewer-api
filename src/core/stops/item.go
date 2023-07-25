@@ -5,12 +5,20 @@ import "gtfs_viewer/src/helpers"
 type StopItem struct {
 	Xcoord    float32 `json:"x"`
 	Ycoord    float32 `json:"y"`
-	Index     uint32  `json:"index"`
+//	Index     uint32  `json:"index"`
 	StartDate uint32  `json:"start_date"`
 	EndDate   uint32  `json:"end_date"`
 	RouteType uint8   `json:"route_type"`
 	RouteId   uint8   `json:"route_id"`
 }
+
+type StopItemFiltered struct {
+	X    		float32	
+	Y    		float32	
+	RouteType 	uint8   
+	RouteId   	uint8	
+}
+
 func (s *StopItem) IsDateValid(date uint32) bool {
 	return s.StartDate <= date && s.EndDate >= date
 }

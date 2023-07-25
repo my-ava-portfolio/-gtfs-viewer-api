@@ -21,7 +21,7 @@ func TestMovingNodesRoute(t *testing.T) {
 	req, _ := http.NewRequest("GET", "/api/v2/fake/moving_nodes?date=1167642440&bounds=-180.0,-89.0,180.0,89.0", nil)
 	Router.ServeHTTP(w, req)
 
-    var stops []gtfs.StopItem
+    var stops []gtfs.StopItemFiltered
     json.Unmarshal(w.Body.Bytes(), &stops)
 
     assert.Equal(t, http.StatusOK, w.Code)
