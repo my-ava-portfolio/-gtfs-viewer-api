@@ -3,7 +3,6 @@ package stops
 import "gtfs_viewer/src/helpers"
 
 type StopItem struct {
-	//RouteLongName	string    	`json:"route_long_name"`
 	Xcoord    float32 `json:"x"`
 	Ycoord    float32 `json:"y"`
 	Index     uint32  `json:"index"`
@@ -17,4 +16,9 @@ func (s *StopItem) IsDateValid(date uint32) bool {
 }
 func (s *StopItem) IntersectsBounds(bounds []float32) bool {
 	return helpers.IsPointIntersectsBounds([2]float32{s.Xcoord, s.Ycoord}, bounds)
+}
+
+type StopRouteItem struct {
+	RouteId   		uint32 `json:"route_id"`
+	RouteLongName   string `json:"route_long_name"`
 }
